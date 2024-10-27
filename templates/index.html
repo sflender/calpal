@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .totals {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calorie Tracker</h1>
+        <form method="POST">
+            <input type="text" name="food_input" placeholder="What did you eat?" required>
+            <button type="submit">Add</button>
+        </form>
+
+        <div class="totals">
+            <h2>Today's Totals</h2>
+            <p>Calories: {{ user_data.total_calories }} / {{ remaining.calories }} left</p>
+            <p>Protein: {{ user_data.total_protein }}g / {{ remaining.protein }}g left</p>
+            <p>Carbs: {{ user_data.total_carbs }}g / {{ remaining.carbs }}g left</p>
+            <p>Fat: {{ user_data.total_fat }}g / {{ remaining.fat }}g left</p>
+        </div>
+    </div>
+</body>
+</html>

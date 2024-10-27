@@ -1,0 +1,5 @@
+Flask==2.3.2
+openai==0.27.8
+gunicorn==21.2.0  # If deploying to platforms like Heroku
+pytest==7.4.0  # For testing
+requests==2.31.0  # For any external API calls
