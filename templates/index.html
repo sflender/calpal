@@ -36,8 +36,11 @@
         button:hover {
             background-color: #218838;
         }
-        .totals {
+        .totals, .log {
             margin: 20px 0;
+        }
+        .log ul {
+            padding-left: 20px;
         }
     </style>
 </head>
@@ -55,7 +58,21 @@
             <p>Protein: {{ user_data.total_protein }}g / {{ remaining.protein }}g left</p>
             <p>Carbs: {{ user_data.total_carbs }}g / {{ remaining.carbs }}g left</p>
             <p>Fat: {{ user_data.total_fat }}g / {{ remaining.fat }}g left</p>
+            <p>Fiber: {{ user_data.total_fiber }}g / {{ remaining.fiber }}g left</p>
         </div>
+
+        <div class="log">
+            <h2>User Log</h2>
+            <ul>
+                {% for prompt in user_data.prompts %}
+                    <li>{{ prompt }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <form method="POST" action="/clear">
+            <button type="submit">Clear All</button>
+        </form>
     </div>
 </body>
 </html>
