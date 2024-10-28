@@ -1,4 +1,6 @@
-Flask==2.3.2
+Flask==3.0.3           # Latest version of Flask
+Flask-Session==0.8.0   # Latest session management library
+python-dotenv==1.0.0   # Environment variable management
 openai==0.27.8
 gunicorn==21.2.0  # If deploying to platforms like Heroku
 pytest==7.4.0  # For testing
