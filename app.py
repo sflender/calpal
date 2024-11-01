@@ -1,6 +1,6 @@
 import os
 import openai
-from flask import Flask, request, redirect, url_for, render_template, session
+from flask import Flask, request, redirect, url_for, render_template, session, flash
 from flask_session import Session
 
 # Initialize the Flask app
@@ -11,23 +11,22 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = os.urandom(24)  # Generate a random secret key
 Session(app)  # Initialize the session
 
-# Nutrition goals
-nutrition_goals = {
-    "calories": 2000,
-    "protein": 150,  # grams
-    "carbs": 250,    # grams
-    "fat": 70,       # grams
-    "fiber": 40      # grams
-}
+# Set a session token limit (e.g., 1000 tokens per session)
+TOKEN_LIMIT = 1000
 
 # OpenAI API setup
 openai.api_key = os.getenv("OPENAI_API_KEY")  # Load the API key from environment variables
 
 def get_nutrition_info(food_description):
-    """Use OpenAI to get nutrition data from the user's food description."""
+    """Use OpenAI to get nutrition data from the user's food description, tracking token usage."""
+    # Check if the session has exceeded the token limit
+    if session.get("total_tokens_used", 0) >= TOKEN_LIMIT:
+        flash("Token limit reached for this session. Please clear data or wait for the next session.")
+        return None
+    
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4-turbo",  # You can also use gpt-4 if available
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
@@ -40,6 +39,10 @@ def get_nutrition_info(food_description):
                 {"role": "user", "content": food_description}
             ]
         )
+        # Get the number of tokens used in this response
+        tokens_used = response["usage"]["total_tokens"]
+        session["total_tokens_used"] = session.get("total_tokens_used", 0) + tokens_used
+
         return parse_nutrition_response(response.choices[0].message.content)
     except Exception as e:
         print(f"Error with OpenAI API call: {e}")
@@ -73,6 +76,7 @@ def index():
             "total_fiber": 0,
             "prompts": []
         }
+        session["total_tokens_used"] = 0  # Initialize token usage tracking
 
     if request.method == "POST":
         # Process user input
@@ -93,19 +97,16 @@ def index():
 
         return redirect(url_for("index"))
 
-    # Calculate remaining nutrition goals
+    # Render the user data without any limits on calorie, protein, carb, fat, or fiber goals
     user_data = session["user_data"]
-    remaining = {
-        key: max(0, nutrition_goals[key] - user_data.get(f"total_{key}", 0))
-        for key in nutrition_goals
-    }
 
-    return render_template("index.html", user_data=user_data, remaining=remaining)
+    return render_template("index.html", user_data=user_data)
 
 @app.route("/clear", methods=["POST"])
 def clear_data():
     """Clear the current user's session data."""
     session.pop("user_data", None)
+    session.pop("total_tokens_used", None)  # Reset token usage tracking
     return redirect(url_for("index"))
 
 if __name__ == "__main__":

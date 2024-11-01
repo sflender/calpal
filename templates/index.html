@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracker</title>
+    <title>CalPal</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,7 +46,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Calorie Tracker</h1>
+        <h1>CalPal</h1>
+        <h2>Your personal AI calorie tracker</h2>
         <form method="POST">
             <input type="text" name="food_input" placeholder="What did you eat?" required>
             <button type="submit">Add</button>
@@ -54,11 +55,11 @@
 
         <div class="totals">
             <h2>Today's Totals</h2>
-            <p>Calories: {{ user_data.total_calories }} / {{ remaining.calories }} left</p>
-            <p>Protein: {{ user_data.total_protein }}g / {{ remaining.protein }}g left</p>
-            <p>Carbs: {{ user_data.total_carbs }}g / {{ remaining.carbs }}g left</p>
-            <p>Fat: {{ user_data.total_fat }}g / {{ remaining.fat }}g left</p>
-            <p>Fiber: {{ user_data.total_fiber }}g / {{ remaining.fiber }}g left</p>
+            <p>Calories: {{ user_data.total_calories }}</p>
+            <p>Protein: {{ user_data.total_protein }}g</p>
+            <p>Carbs: {{ user_data.total_carbs }}g</p>
+            <p>Fat: {{ user_data.total_fat }}g</p>
+            <p>Fiber: {{ user_data.total_fiber }}g</p>
         </div>
 
         <div class="log">
